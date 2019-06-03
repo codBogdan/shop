@@ -17,9 +17,9 @@ public class Product {
     private String name;
     @NotNull
     @Min(0)
-    private int quantity;
+    private Integer quantity;
     @NotNull
-    private double price;
+    private Double price;
     private String image;
 
     public long getId() {
