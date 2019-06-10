@@ -58,12 +58,5 @@ public class ProductController {
     public ResponseEntity updateProduct(@PathVariable("id") Long id,@RequestBody @Valid UpdateProductRequest request) throws ResourceNotFoundException {
         productService.updateProduct(id, request);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-
     }
-
-
-
-
-
-
 }

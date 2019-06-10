@@ -21,4 +21,6 @@ public class DocumentationConfig {
                 .paths(PathSelectors.any())
                 .build();
     }
+
+
 }
