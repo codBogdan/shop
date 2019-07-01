@@ -3,6 +3,7 @@ package org.fasttrackit.onlineshopapi.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.fasttrackit.onlineshopapi.domain.Product.Customer;
+import org.fasttrackit.onlineshopapi.exception.ResourceNotFoundException;
 import org.fasttrackit.onlineshopapi.repository.ProductRepository.CustomerRepository;
 import org.fasttrackit.onlineshopapi.transfer.customer.CreateCustomerRequest;
 import org.slf4j.Logger;
@@ -34,6 +35,13 @@ public class CustomerService {
         LOGGER.info("Deleting product {}", id);
         customerRepository.deleteById(id);
         LOGGER.info("Deleted product {}", id);
+    }
+
+
+    public Customer getCustomer(long id) throws ResourceNotFoundException {
+        LOGGER.info("Retrieving customer {}" , id);
+        return customerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer " + id + " does not exist."));
     }
 
 }
