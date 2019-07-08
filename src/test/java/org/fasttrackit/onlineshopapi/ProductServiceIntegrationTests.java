@@ -3,6 +3,7 @@ package org.fasttrackit.onlineshopapi;
 import org.fasttrackit.onlineshopapi.domain.Product.Product;
 import org.fasttrackit.onlineshopapi.exception.ResourceNotFoundException;
 import org.fasttrackit.onlineshopapi.service.ProductService;
+import org.fasttrackit.onlineshopapi.steps.ProductSteps;
 import org.fasttrackit.onlineshopapi.transfer.CreateProductRequest;
 import org.fasttrackit.onlineshopapi.transfer.UpdateProductRequest;
 import org.junit.Test;
@@ -11,9 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.TransactionSystemException;
-
-import javax.validation.ConstraintViolationException;
-import javax.validation.constraints.Min;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
@@ -28,30 +26,13 @@ public class ProductServiceIntegrationTests {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private ProductSteps productSteps;
     @Test
     public void testCreatProduct_whenValidRequest_thenReturnCreatedProduct(){
 
-        createProduct();
-
+        productSteps.createProduct();
     }
-
-    private Product createProduct() {
-        CreateProductRequest request = new CreateProductRequest();
-        request.setName("Nivea");
-        request.setPrice(99.99);
-        request.setQuantity(10);
-
-        Product createdProduct = productService.createProduct(request);
-
-        assertThat(createdProduct, notNullValue());
-        assertThat(createdProduct.getId(), greaterThan(0L));
-        assertThat(createdProduct.getName(), is(request.getName()));
-        assertThat(createdProduct.getPrice(), is(request.getPrice()));
-        assertThat(createdProduct.getQuantity(), is(request.getQuantity()));
-
-        return createdProduct;
-    }
-
 
 
     @Test(expected = TransactionSystemException.class)
@@ -108,7 +89,23 @@ public class ProductServiceIntegrationTests {
     }
 
 
+    public Product createProduct() {
+        CreateProductRequest request = new CreateProductRequest();
+        request.setName("Nivea");
+        request.setPrice(99.99);
+        request.setQuantity(10);
 
+        Product createdProduct = productService.createProduct(request);
+
+        assertThat(createdProduct, notNullValue());
+        assertThat(createdProduct.getId(), greaterThan(0L));
+        assertThat(createdProduct.getName(), is(request.getName()));
+        assertThat(createdProduct.getPrice(), is(request.getPrice()));
+        assertThat(createdProduct.getQuantity(), is(request.getQuantity()));
+
+        return createdProduct;
+
+    }
 
 
 }

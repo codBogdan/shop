@@ -3,8 +3,11 @@ package org.fasttrackit.onlineshopapi.domain.Product;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Product {
@@ -21,6 +24,11 @@ public class Product {
     @NotNull
     private Double price;
     private String image;
+
+
+    @ManyToMany(mappedBy = "products")
+    private Set<Cart> carts = new HashSet<>();
+
 
     public long getId() {
         return id;
@@ -60,5 +68,13 @@ public class Product {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public Set<Cart> getCarts() {
+        return carts;
+    }
+
+    public void setCarts(Set<Cart> carts) {
+        this.carts = carts;
     }
 }
