@@ -7,6 +7,7 @@ import org.fasttrackit.onlineshopapi.service.ProductService;
 import org.fasttrackit.onlineshopapi.transfer.CreateProductRequest;
 import org.fasttrackit.onlineshopapi.transfer.GetProductsRequest;
 import org.fasttrackit.onlineshopapi.transfer.UpdateProductRequest;
+import org.fasttrackit.onlineshopapi.transfer.product.ProductDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -29,8 +30,8 @@ public class ProductController {
 
     // endpoint
     @GetMapping
-    public ResponseEntity<Page<Product>> getProducts(GetProductsRequest request, Pageable pageable){
-        Page<Product> response = productService.getProducts(request, pageable);
+    public ResponseEntity<Page<ProductDto>> getProducts(GetProductsRequest request, Pageable pageable){
+        Page<ProductDto> response = productService.getProducts(request, pageable);
         return new ResponseEntity<>(response, HttpStatus.OK);
 
     }

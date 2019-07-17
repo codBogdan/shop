@@ -7,13 +7,18 @@ import org.fasttrackit.onlineshopapi.repository.ProductRepository.ProductReposit
 import org.fasttrackit.onlineshopapi.transfer.CreateProductRequest;
 import org.fasttrackit.onlineshopapi.transfer.GetProductsRequest;
 import org.fasttrackit.onlineshopapi.transfer.UpdateProductRequest;
+import org.fasttrackit.onlineshopapi.transfer.product.ProductDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 //IoC (inversion on control) and dependency injection
@@ -77,19 +82,36 @@ public class ProductService {
     }
 
 
-    public Page<Product> getProducts(GetProductsRequest request, Pageable pageable) {
+    public Page<ProductDto> getProducts(GetProductsRequest request, Pageable pageable) {
         LOGGER.info("Retrieving products {}", request);
 
+        Page<Product> products;
+
+
         if (request.getPartialName() != null && request.getMinimumQuantity() != null) {
-            return productRepository.findByNameContainingAndQuantityGreaterThanEqual(request.getPartialName(), request.getMinimumQuantity(), pageable);
+           products = productRepository.findByNameContainingAndQuantityGreaterThanEqual(request.getPartialName(), request.getMinimumQuantity(), pageable);
 
         } else if (request.getPartialName() != null) {
-            return productRepository.findByNameContaining(request.getPartialName(), pageable);
+           products =  productRepository.findByNameContaining(request.getPartialName(), pageable);
 
-
+        }else {
+            products = productRepository.findAll(pageable);
         }
 
-        return productRepository.findAll(pageable);
+
+        List<ProductDto> productDtos = new ArrayList<>();
+
+        products.getContent().forEach(product -> {ProductDto productDto = new ProductDto();
+        productDto.setId(product.getId());
+        productDto.setName(product.getName());
+        productDto.setImage(product.getImage());
+        productDto.setPrice(product.getPrice());
+        productDto.setQuantity(product.getQuantity());
+
+        productDtos.add(productDto);
+        });
+
+        return new PageImpl<>(productDtos, pageable, products.getTotalElements());
     }
 
 
