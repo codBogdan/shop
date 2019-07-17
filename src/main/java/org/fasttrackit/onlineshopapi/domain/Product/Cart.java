@@ -15,6 +15,8 @@ public class Cart {
     @MapsId
     private Customer customer;
 
+
+
     @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable( name = "cart_product", joinColumns = @JoinColumn(name = "cart_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
     private Set<Product> products = new HashSet<>();
